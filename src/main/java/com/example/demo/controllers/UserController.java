@@ -1,13 +1,9 @@
 package com.example.demo.controllers;
 
-import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,8 +58,12 @@ public class UserController {
 			return ResponseEntity.badRequest().build();
 		}
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
-		userRepository.save(user);
-		log.info("Created new user: ", createUserRequest.getUsername());
+		User result = userRepository.save(user);
+		if (result == null) {
+			log.warn("Could not create user " + createUserRequest.getUsername());
+			return ResponseEntity.badRequest().build();
+		}
+		log.info("Created new user: " + createUserRequest.getUsername());
 
 		return ResponseEntity.ok(user);
 	}

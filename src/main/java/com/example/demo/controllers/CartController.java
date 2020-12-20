@@ -52,7 +52,7 @@ public class CartController {
 		IntStream.range(0, request.getQuantity())
 			.forEach(i -> cart.addItem(item.get()));
 		cartRepository.save(cart);
-		log.info("Cart saved for user: ", user.getUsername());
+		log.info("Cart saved for user: " + user.getUsername());
 
 		return ResponseEntity.ok(cart);
 	}

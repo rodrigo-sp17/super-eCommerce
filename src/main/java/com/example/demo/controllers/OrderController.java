@@ -40,7 +40,11 @@ public class OrderController {
 			return ResponseEntity.notFound().build();
 		}
 		UserOrder order = UserOrder.createFromCart(user.getCart());
-		orderRepository.save(order);
+		UserOrder result = orderRepository.save(order);
+		if (result == null) {
+			log.warn("Could not save order for user " + username);
+			return ResponseEntity.badRequest().build();
+		}
 		log.info("Submitted order for user: ", order.getUser().getUsername());
 		return ResponseEntity.ok(order);
 	}

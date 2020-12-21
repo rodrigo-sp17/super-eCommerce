@@ -1,7 +1,10 @@
 package com.example.demo.controllers;
 
+import org.apache.logging.log4j.core.LoggerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.*;
+import com.splunk.logging.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,11 +21,13 @@ import com.example.demo.model.persistence.repositories.CartRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
-	public static final Logger log = LoggerFactory.getLogger(UserController.class);
+	public final Logger log = LoggerFactory.getLogger("splunk.logger");
 
 	@Autowired
 	private UserRepository userRepository;
@@ -54,7 +59,7 @@ public class UserController {
 		user.setCart(cart);
 		if (createUserRequest.getPassword().length() < 7 ||
 				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())) {
-			log.info("Password does not meet requirements!");
+			log.info("Failed new user: Password does not meet requirements!");
 			return ResponseEntity.badRequest().build();
 		}
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));

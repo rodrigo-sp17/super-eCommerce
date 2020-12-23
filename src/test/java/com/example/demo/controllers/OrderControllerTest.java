@@ -46,8 +46,10 @@ public class OrderControllerTest {
         Cart cart = getCart();
         cart.setUser(user);
         user.setCart(cart);
+        UserOrder order = UserOrder.createFromCart(cart);
 
         when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
+        when(orderRepository.save(any())).thenReturn(order);
 
         final ResponseEntity<UserOrder> response = orderController.submit(user.getUsername());
         UserOrder result = response.getBody();

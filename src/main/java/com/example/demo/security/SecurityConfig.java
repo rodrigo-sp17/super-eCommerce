@@ -41,8 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new AuthFilter(authenticationManager()))
                 .addFilter(new AuthorizationFilter(authenticationManager()))
-                .sessionManagement().disable()
-                .cors().and().csrf().disable();
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().csrf().disable();
     }
 
     @Override

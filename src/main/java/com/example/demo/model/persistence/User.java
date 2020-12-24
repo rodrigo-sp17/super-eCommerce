@@ -31,6 +31,7 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 
+	@JsonIgnore
 	private String salt;
 	
 	@OneToOne(cascade = CascadeType.ALL)
